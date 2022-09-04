@@ -1,6 +1,26 @@
 {
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "This is commanline based Node application used to generate a Static HTMl page to display team details",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahebbhalla/team-profile-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sahebbhalla/team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/sahebbhalla/team-profile-generator#readme",
   "dependencies": {
-    "inquirer": "^8.0.0",
+    "inquirer": "^8.2.4",
     "jest": "^29.0.2"
   }
 }
