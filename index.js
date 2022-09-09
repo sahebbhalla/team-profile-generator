@@ -4,10 +4,17 @@ const Manager = require("./lib/Manager");
 const Intern = require("./lib/Intern");
 const Engineer = require("./lib/Engineer");
 const fs = require('fs');
-
+var count =0;
+var totalTeams;
 const teams = [];
-
-
+const addTeamMembers = [
+    {
+      name: "member",
+      message: "Please select which team memeber would you like to Add ?",
+      type: "list",         
+       choices:["Intern","Engineer","Exit this Team config"]
+      }
+  ];
 function app() {
   inquirer
     .prompt([
@@ -18,13 +25,13 @@ function app() {
       },
     ])
     .then((answers) => {
-      createTeam(answers.teams);
+      totalTeams = answers.teams;
+        createTeam();
+
     });
 }
-function createTeam(number) {
-  let loop = number;
-  let count = 0;
-
+function createTeam() {
+    
   const ask = () => {
     inquirer
       .prompt([
@@ -53,59 +60,43 @@ function createTeam(number) {
           message: "Please enter Managers Office Number",
           name: "managerOfficeNumber",
         },
-        {
-          type: "text",
-          message: "How many team members does this Manager oversee ?",
-          name: "members",
-        },
       ])
       .then((answers) => {
         console.log("here")
         const team = new Team( answers.teamname,
           new Manager(answers.manager,answers.managerID,answers.managerEmail,answers.managerOfficeNumber));
-        const teamMembers =answers.members;
-        const membersAdded =0;
-        
-        createTeamMembers(answers,team);
-        // count++;
-        // teams.push(team);
-        // if (count < loop) {
-        //   ask();
-        // }
+        createTeamMembers(team);
+    
       });
   };
-  ask();
+  if(count<totalTeams){
+    count++;
+    ask();
+  }
+  else{
+    createHTML(teams);
+  }
 }
-
-
-function addTeamMembers(answers,team){
-    var membersAdded=0
-      inquirer.prompt([
-        {          type: "text",
-        message: "How many team members does this Manager oversee ?",
-        name: "members"},
-        {name: "member",
-        message: "Please select which team memeber would you like to Add ?",
-        type: "list",         
-         choices:["Intern","Engineer","Exit this Team config"],
+function createTeamMembers(team){
+    inquirer.prompt(addTeamMembers)
+    .then(function(userInput){
+        switch(userInput.member){
+        case "Intern":
+            internQuestion(team);
+            break;
+        case "Engineer":
+            engineerQuestion(team);
+            break;
+        case "Exit this Team config":
+            teams.push(team);
+            console.log(teams);
+            createTeam();
+        default:
+            break;
         }
-    ]
-      ).then(({member})=>{
+        })
+}
   
-
-        // if(member == "Intern"){
-        //     membersAdded=+1;
-
-        // }
-        // else if(member == "Engineer"){
-        //     membersAdded=+1
-        //     if(membersAdded<teamMembers){
-        //         teamQuestions();
-        //     }
-        // }
-
-      });
-    };
 
 function markDown(data){
     console.log("test"+data);
@@ -163,10 +154,10 @@ function createHTML(teams){
         if (err) throw err;
         console.log("File saved");
       })
-
 }
-function internQuestion(){
-    inquirer.prompt([ {
+const internQuestion = (team) => {
+    inquirer.prompt([ 
+      {
         type: "text",
         message: "Please enter the name of the Intern",
         name: "intern",
@@ -186,57 +177,66 @@ function internQuestion(){
         message: "Please enter the Intern's school Name",
         name: "schoolName",
       },
-    ]).then((answers)=>{
+    ]).then(answers => {
         const intern = new Intern(answers.intern,answers.internID,answers.internEmail,answers.schoolName)
-        team.addintern(intern);
-        if(membersAdded<teamMembers){
-            teamQuestions();
-        }
-    })
-}
-
-function createTeamMembers(answers,team){
-    inquirer.prompt(addTeamMembers(answers,team)).then(function(userInput){
-        switch(userInput.member){
-
-        case "Intern":
-            internQuestion()
-            // addTeamMembers()
-
-        case "Engineer":
-            addEngineer();
-            // addTeamMembers()
-        default:
-            break;
-        }
+        team.addIntern(intern);
+        createTeamMembers(team);
         })
-}
+    }
+const engineerQuestion = (team) => {
+        inquirer.prompt([ 
+          {
+            type: "text",
+            message: "Please enter the name of the Engineer",
+            name: "engineer",
+          },
+          {
+            type: "text",
+            message: "Please enter the Engineer's ID",
+            name: "engineerID",
+          },
+          {
+            type: "text",
+            message: "Please enter the Engineer's email Adress",
+            name: "engineerEmail",
+          },
+          {
+            type: "text",
+            message: "Please enter the Engineer's role",
+            name: "engineerrole",
+          },
+          {
+            type: "text",
+            message: "Please enter the Engineer's Github Account",
+            name: "engineerGithub",
+          }
+        ]).then(answers => {
+            const engineer = new Engineer(answers.engineer,answers.engineerID,answers.engineerEmail,answers.engineerRole,answers.engineerGithub)
+            team.addEngineer(engineer);
+            createTeamMembers(team);
+            })
+        }
+
 // const ManagerTeam1 = new Manager("saheb",1,"test@test.com",01);
 // const ManagerTeam2 = new Manager("saheb Bhalla",2,"test@test.com",02);
-
 // const team1 = new Team("Front-End",ManagerTeam1)
 // const team2 = new Team("back-end",ManagerTeam2)
-
 // const intern1 = new Intern("Bhalla",2,"s@test.com","UOFT");
 // const intern2 = new Intern("Bhalla",2,"s@test.com","UOFT");
 // team1.addintern(intern1);
 // team1.addintern(intern2);
-
 // const intern3 = new Intern("Bhalla",2,"s@test.com","UOFT");
 // const intern4 = new Intern("Bhalla",2,"s@test.com","UOFT");
 // team2.addintern(intern3);
 // team2.addintern(intern4);
-
 // const engineer1 = new Engineer("Eng Saheb 1",3,"S@test.com","QA","testAccount")
 // const engineer2 = new Engineer("Eng Saheb 2",3,"S@test.com","QA","testAccount")
 // team1.addEngineer(engineer1);
 // team1.addEngineer(engineer2)
-
 // const engineer3 = new Engineer("Saheb",3,"S@test.com","QA","testAccount")
 // const engineer4 = new Engineer("Saheb",3,"S@test.com","QA","testAccount")
 // team2.addEngineer(engineer3);
 // team2.addEngineer(engineer4);
-
 // teams.push(team1)
 // teams.push(team2)
 // console.log(teams);
