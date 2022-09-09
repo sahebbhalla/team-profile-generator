@@ -1,4 +1,25 @@
+*{
+    margin:0;
+    padding: 0;
+    list-style: none;
+}
 #header{
-    color:black;
+    color:white;
     text-align: center;
+    background-color: rgb(233, 38, 38);
+}
+.teamsContainer{
+    
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.card-title{
+    background-color: aqua;
+}
+
+#engineerContainer{
+
+  
 }

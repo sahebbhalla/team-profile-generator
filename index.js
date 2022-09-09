@@ -99,7 +99,7 @@ function createTeamMembers(team){
   
 
 function markDown(data){
-    console.log("test"+data);
+    
     return`<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -107,42 +107,72 @@ function markDown(data){
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Team info</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/src/styles.css">
     </head>
     <body>
         <h1 id ="header"> Welcome to team builder application</h1>
-        <div class ="teamContainer">
+        <div class ="teamsContainer">
         ${data
             .filter(({ manager}) =>manager)
             .map(({ teamName,manager,engineerArray,internArray }) => {
-    
                 return `
-           
-              <h1 class= "teamName">${teamName}</h2>
-              <div class ="teamMembers">
-              <h2 class ="managerName">${manager.name}<h2>
-              <h3 class ="engineerContainer">Engineers In the Team</h3>
+              <div class ="teamContainer">
+                <h1 class= "teamName">Team ${teamName}</h1>
+                <div class ="teamMembers">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body manager-card">
+                        <h5 class="card-title">${manager.name}<br><i class="fa fa-coffee"></i> Manager</h5>
+                        <ul class="card-text">
+                            <li>Manager Id -${manager.id}</li>
+                            <li>Manager officeNumber${manager.officeNumber}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id ="engineerContainer">
                 ${engineerArray.filter((engineer)=>engineer).map((engineer)=>{
                     return`
-                    <h4 class="engineerId">${engineer.id}</h4>
-                    <h4 class="engineerName">${engineer.name}</h4>
-                    <h4 class="engineerEmail">${engineer.email}</h4>
-                    <h4 class="engineerGithub">${engineer.gitHub}</h4>
+                    <div class ="engineer">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${engineer.name}<br><i class="fa fa-glasses"></i> Engineer</h5>
+                                <ul class="card-text">
+                                    <li>Engineer Id -${engineer.id}</li>
+                                    <li>Engineer Email${engineer.email}</li>
+                                    <li>GitHub -${engineer.gitHub}</li>
+                                </ul>
+                        </div>
+                        </div>
+                    </div>
                     `
                 }).join('')}
-                <h4>Interns<h4>
+                </div>
+              
+                <div class ="internContainer">
                 ${internArray.filter((intern)=>intern).map((intern)=>{
-                    console.log(intern)
                     return`
-                    <h4 class="internId">${intern.id}</h4>
-                    <h4 class="internName">${intern.name}</h4>
-                    <h4 class="internEmail">${intern.email}</h4>
-                    <h4 class="internSchool">${intern.school}</h4>
+                    <div class="intern"> 
+                        <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${intern.name}<br><i class='fa fa-user-graduate'></i> Intern</h5>
+                                <ul class="card-text">
+                                    <li>Intern Id - ${intern.id}</li>
+                                    <li>Intern Email - ${intern.email}</li>
+                                    <li>School Name -${intern.school}</li>
+                                </ul>
+                        </div>
+                        </div>
+                    </div>
                     `
                 }).join('')}
+                </div>
+                </div>
+                </div>
                 `;
             })
             .join('')}
+               
             </div>
     </body>
     </html>
@@ -217,28 +247,4 @@ const engineerQuestion = (team) => {
             })
         }
 
-// const ManagerTeam1 = new Manager("saheb",1,"test@test.com",01);
-// const ManagerTeam2 = new Manager("saheb Bhalla",2,"test@test.com",02);
-// const team1 = new Team("Front-End",ManagerTeam1)
-// const team2 = new Team("back-end",ManagerTeam2)
-// const intern1 = new Intern("Bhalla",2,"s@test.com","UOFT");
-// const intern2 = new Intern("Bhalla",2,"s@test.com","UOFT");
-// team1.addintern(intern1);
-// team1.addintern(intern2);
-// const intern3 = new Intern("Bhalla",2,"s@test.com","UOFT");
-// const intern4 = new Intern("Bhalla",2,"s@test.com","UOFT");
-// team2.addintern(intern3);
-// team2.addintern(intern4);
-// const engineer1 = new Engineer("Eng Saheb 1",3,"S@test.com","QA","testAccount")
-// const engineer2 = new Engineer("Eng Saheb 2",3,"S@test.com","QA","testAccount")
-// team1.addEngineer(engineer1);
-// team1.addEngineer(engineer2)
-// const engineer3 = new Engineer("Saheb",3,"S@test.com","QA","testAccount")
-// const engineer4 = new Engineer("Saheb",3,"S@test.com","QA","testAccount")
-// team2.addEngineer(engineer3);
-// team2.addEngineer(engineer4);
-// teams.push(team1)
-// teams.push(team2)
-// console.log(teams);
 app();
-// createHTML(teams);
